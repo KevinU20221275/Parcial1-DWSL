@@ -1,0 +1,24 @@
+create DATABASE globalTechSolutionsDB;
+
+create table usuario(
+	id int PRIMARY KEY AUTO_INCREMENT,
+    nombre varchar(100),
+    nombreUsuario varchar(50) UNIQUE,
+    password varchar(250)
+);
+
+create table Cargo (
+	id int PRIMARY KEY AUTO_INCREMENT,
+    nombreCargo varchar(100),
+    descripcion varchar(150)
+);
+
+create table Empleado(
+	id int PRIMARY KEY AUTO_INCREMENT,
+    nombre varchar(100),
+    telefono int,
+    correo varchar(50),
+    salario decimal,
+    cargoId int,
+    FOREIGN KEY (cargoId) REFERENCES Cargo(Id) ON UPDATE CASCADE
+)
