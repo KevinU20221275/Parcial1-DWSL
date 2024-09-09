@@ -1,14 +1,12 @@
 <?php
+include_once('../../Negocio/cargos.php');
+$cargos = new Cargo();
 
 if ($busqueda != NULL) {
-    $query = "SELECT * FROM Cargo
-                WHERE id LIKE '%$busqueda%' OR
-                nombreCargo LIKE '%$busqueda%' OR 
-                descripcion LIKE '%$busqueda%'";
+    $result = $cargos->search_cargo($busqueda);
 } else {
-    $query = "SELECT * FROM Cargo";
+    $result = $cargos->listar_cargos();
 }
-
 
 ?>
 
@@ -18,8 +16,8 @@ if ($busqueda != NULL) {
             <div class="container-fluid">
                 <h6 class="mb-0">Registros de Cargos</h6>
                 <div class="d-flex flex-column flex-sm-row gap-2 align-items-center justify-content-between mb-2 p-3">
-                    <a href="formularioCargo.php" class="btn btn-success btn-sm">
-                        Agregar Cargo
+                    <a href="formularioCargos.php" class="btn btn-success btn-sm">
+                        Agregar Cargo <i class="fa-regular fa-square-plus"></i>
                     </a>
                     <div class="d-flex flex-column flex-sm-row gap-2 align-items-center">
                         <form action="index.php" method="post" class="d-flex ms-4">
@@ -44,18 +42,16 @@ if ($busqueda != NULL) {
                 <tbody>
                     <?php
 
-                    $result = mysqli_query($conn, $query);
-
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
+                    if (!empty($result)) {
+                        foreach ($result as $row) {
                             echo "<tr>";
                             echo "<td>" . $row['id'] . "</td>";
                             echo "<td>" . $row['nombreCargo'] . "</td>";
                             echo "<td>" . $row['descripcion'] . "</td>";
                             echo "<td>
-                                                <a href='formularioCargo.php?id=" . $row['id'] . "' class='btn btn-sm btn-warning'>Editar</a>
-                                                <a href='../Controllers/cargoController.php?id=" . $row['id'] . "&bandera=3' class='btn btn-sm btn-primary'>Eliminar</a>
-                                            </td>";
+                            <a href='formularioCargos.php?id=" . $row['id'] . "' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
+                            <a href='../../Controllers/cargoController.php?id=" . $row['id'] . "&bandera=3' class='btn btn-sm btn-primary'><i class='fa-solid fa-trash'></i></a>
+                        </td>";
                             echo "</tr>";
                         }
                     } else {
@@ -63,7 +59,6 @@ if ($busqueda != NULL) {
                         echo '<td colspan="7">Sin resultados</td>';
                         echo '</tr>';
                     }
-                    mysqli_close($conn);
                     ?>
                 </tbody>
             </table>

@@ -1,11 +1,9 @@
 <?php
 session_start();
 if ($_SESSION['usuario'] == "") {
-    header("Location: ../../index.php");
+    header("Location: ../../../index.php");
     exit();
 }
-
-include_once('../../conf/conf.php');
 
 $busqueda = isset($_POST['busqueda']) ? ($_POST['busqueda']) : null;
 
@@ -18,7 +16,7 @@ $route = 'cargos';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puestos</title>
+    <title>Cargos</title>
 
     <!-- Favicon -->
     <link href="./img/favicon.ico" rel="icon">
@@ -32,17 +30,17 @@ $route = 'cargos';
     <script src="https://kit.fontawesome.com/3fb00ab759.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
 
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
 </head>
 
 <body>
     <div class="container-fluid position-relative d-flex p-0">
+ 
         <!-- Spinner Start -->
-        <?php include_once('../modules/spinner.php') ?>
+        <?php include_once('../modules/spinner.php')?>
         <!-- Spinner End -->
-
 
         <!-- Sidebar Start -->
         <?php include_once('../modules/sidebar.php') ?>
@@ -78,7 +76,7 @@ $route = 'cargos';
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="../../assets/js/main.js"></script>
+    <script src="../../../assets/js/main.js"></script>
 </body>
 
 </html>

@@ -1,21 +1,28 @@
 <?php
 session_start();
 if ($_SESSION['usuario'] == "") {
-    header("Location: ../../index.php");
+    header("Location: ../../../index.php");
     exit();
 }
 
+require_once('../../Negocio/cargos.php');
+$cargo = new Cargo();
+$cargos = $cargo->listar_cargos();
+
 $idGet = isset($_GET['id']) ? $_GET['id'] : "";
 
-include_once('../../conf/conf.php');
+$id = $idGet; // lo guardo aqui como $id porque es el parametro que resibe la funcion
 
-$title = "Agregar Empleado";
 $action = "Agregar";
+$title = "Agregar Empleado";
 
-if ($idGet != "") {
-    $query = "SELECT * FROM Empleado WHERE id=$idGet";
-    $ejecutar = mysqli_query($conn, $query);
-    $datos = mysqli_fetch_assoc($ejecutar);
+if ($id != "") {
+    require_once('../../Negocio/empleados.php');
+
+    $empleado = new Empleado();
+    
+    $datos = $empleado->get_empleado($id);
+
     $nombre = $datos['nombre'];
     $telefono = $datos['telefono'];
     $correo = $datos['correo'];
@@ -24,8 +31,9 @@ if ($idGet != "") {
 
     $title = "Modificar Empleado";
     $action = "Modificar";
+    
 } else if (isset($_SESSION['formData'])) {
-    $idGet = $_SESSION['formData']['id'];
+    $id = $_SESSION['formData']['id'];
     $nombre = $_SESSION['formData']['nombre'];
     $telefono = $_SESSION['formData']['telefono'];
     $correo = $_SESSION['formData']['correo'];
@@ -33,15 +41,14 @@ if ($idGet != "") {
     $cargoId = $_SESSION['formData']['cargoId'];
     $action = $_SESSION['formData']['action'];
 
+    $title = $action == "Agregar" ? "Agregar Empleado" : "Modificar Empleado";
+
     $_SESSION['formData'] = null;
     unset($_SESSION['formData']);
 }
 
+// esta variable solo sirver para cambiar la clase 'active' del sidebar
 $route = 'empleados';
-
-$cargo_query = "SELECT * FROM Cargo";
-
-$cargos = mysqli_query($conn, $cargo_query);
 ?>
 
 <!DOCTYPE html>
@@ -64,9 +71,9 @@ $cargos = mysqli_query($conn, $cargo_query);
     <script src="https://kit.fontawesome.com/3fb00ab759.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
 
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -88,32 +95,38 @@ $cargos = mysqli_query($conn, $cargo_query);
 
             <div class="container bg-secondary mt-4 rounded" style="max-width: 600px;">
                 <h2 class="text-white text-center pt-2">Datos del Empleado</h2>
-                <form action="../Controllers/empleadoController.php" method="post" enctype="multipart/form-data">
+                <form action="../../Controllers/empleadoController.php" method="post" enctype="multipart/form-data">
                     <input type="text" name="bandera" value="<?php echo $action == 'Agregar' ? '1' : '2' ?>" hidden>
                     <?php if ($action == 'Modificar') {
-                        echo '<input type="text" name="id" value="' . $idGet . '" hidden>';
+                        echo '<input type="text" name="id" value="' . $id . '" hidden>';
                     } ?>
                     <div class="bg-secondary rounded p-4 pt-1  my-2 mx-3">
                         <div class="form-floating mb-3">
                             <input type="text" name="nombre" class="form-control" id="nombre" value="<?php echo isset($nombre) ? $nombre : "" ?>" placeholder="Nombre" required>
-                            <label for="nombre">Nombre</label>
+                            <label for="nombre">Nombre <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" name="telefono" class="form-control" id="telefono" value="<?php echo isset($telefono) ? $telefono : "" ?>" placeholder="Telefono" required>
-                            <label for="telefono">Telefono</label>
+                            <label for="telefono">Telefono <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="correo" class="form-control" id="email" value="<?php echo isset($correo) ? $correo : "" ?>" placeholder="Email" required>
-                            <label for="email">Email</label>
+                            <label for="email">Email <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="salario" class="form-control" id="salario" value="<?php echo isset($salario) ? $salario : "" ?>" placeholder="Salario" required>
-                            <label for="salario">Salario</label>
+                            <label for="salario">Salario <span class="text-danger">*</span></label>
+                            <span class="text-danger">
+                            <?php
+                                echo $_SESSION['error_message'];
+                                unset($_SESSION['error_message']);
+                            ?>
+                            </span>
                         </div>
                         <div class="form-floating mb-3">
                             <select class="form-select" name="cargoId" id="cargoId" required>
                                 <option value="">Seleccione</option>
-                                <?php while ($cargo = mysqli_fetch_assoc($cargos)) {
+                                <?php foreach ($cargos as $cargo) {
                                     if (isset($cargoId) && $cargo['id'] == $cargoId) {
                                 ?>
                                         <option selected value='<?= $cargo['id'] ?>'><?= $cargo['nombreCargo'] ?></option>";
@@ -122,7 +135,7 @@ $cargos = mysqli_query($conn, $cargo_query);
                                     <?php } ?>
                                 <?php } ?>
                             </select>
-                            <label for="puestoId">Cargo</label>
+                            <label for="puestoId">Cargo <span class="text-danger">*</span></label>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary py-3 w-50  mb-0"><?= $action ?></button>
@@ -130,14 +143,6 @@ $cargos = mysqli_query($conn, $cargo_query);
                         </div>
                     </div>
                 </form>
-                <div class="container-fluid d-flex justify-content-center ">
-                    <p class="text-danger">
-                        <?php
-                            echo $_SESSION['error_message'];
-                            unset($_SESSION['error_message']);
-                        ?>
-                    </p>
-                </div>
             </div>
 
         </div>
@@ -157,7 +162,7 @@ $cargos = mysqli_query($conn, $cargo_query);
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="../../assets/js/main.js"></script>
+    <script src="../../../assets/js/main.js"></script>
 </body>
 
 </html>

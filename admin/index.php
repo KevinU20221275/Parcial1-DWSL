@@ -42,7 +42,7 @@ if ($_SESSION['usuario'] == "") {
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                <a href="" class="navbar-brand mx-4 mb-3">
                     <h3 class="text-primary"><i class="fa fa-solid fa-swatchbook me-2"></i>GTS</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -57,8 +57,8 @@ if ($_SESSION['usuario'] == "") {
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="index.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="./Empleados/index.php" class="nav-item nav-link"> <i class="fa fa-solid fa-user-group me-2"></i>Empleados</a>
-                    <a href="./Cargos/index.php" class="nav-item nav-link"><i class="fa fa-briefcase fa-1x me-2"></i>Cargos</a>
+                    <a href="./Views/Empleados/index.php" class="nav-item nav-link"> <i class="fa fa-solid fa-user-group me-2"></i>Empleados</a>
+                    <a href="./Views/Cargos/index.php" class="nav-item nav-link"><i class="fa fa-briefcase fa-1x me-2"></i>Cargos</a>
                 </div>
             </nav>
         </div>
@@ -82,9 +82,8 @@ if ($_SESSION['usuario'] == "") {
                             <span class="d-none d-lg-inline-flex"><?php echo $_SESSION['usuario'] ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="salir.php" class="dropdown-item">Log Out</a>
+                            <a href="./profile.php" class="dropdown-item">Mi Perfil</a>
+                            <a href="logOut.php" class="dropdown-item">Cerrar Sesion</a>
                         </div>
                     </div>
                 </div>
@@ -94,7 +93,7 @@ if ($_SESSION['usuario'] == "") {
             <!-- Cards Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
-                    <a href="./Empleados/index.php" class="col-sm-6 col-xl-3">
+                    <a href="./Views/Empleados/index.php" class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-solid fa-user-group fa-3x text-primary"></i>
                             <div class="ms-3">
@@ -103,7 +102,7 @@ if ($_SESSION['usuario'] == "") {
                             </div>
                         </div>
                     </a>
-                    <a href="./Cargos/index.php" class="col-sm-6 col-xl-3">
+                    <a href="./Views/Cargos/index.php" class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-briefcase fa-3x text-primary"></i>
                             <div class="ms-3">
@@ -124,7 +123,7 @@ if ($_SESSION['usuario'] == "") {
     </div>
 
     <!-- Footer Start -->
-    <?php include_once('./modules/footer.php') ?>
+    <?php include_once('./Views/modules/footer.php') ?>
     <!-- Footer End -->
 
 

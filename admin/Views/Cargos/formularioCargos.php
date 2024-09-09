@@ -1,21 +1,23 @@
 <?php
 session_start();
 if ($_SESSION['usuario'] == "") {
-    header("Location: ../../index.php");
+    header("Location: ../../../index.php");
     exit();
 }
 
-$idGet = isset($_GET['id']) ? $_GET['id'] : "";
+$id_get = isset($_GET['id']) ? $_GET['id'] : "";
 
-include_once('../../conf/conf.php');
+$id = $id_get; // lo guardo aqui como $id porque es el parametro que resibe las funcion
 
 $title = "Agregar Cargo";
 $action = "Agregar";
 
-if ($idGet != "") {
-    $query = "SELECT * FROM Cargo WHERE id=$idGet";
-    $ejecutar = mysqli_query($conn, $query);
-    $datos = mysqli_fetch_assoc($ejecutar);
+if ($id != "") {
+    require_once('../../Negocio/cargos.php');
+
+    $cargo = new Cargo();
+    
+    $datos = $cargo->get_cargo($id);
     $nombre_cargo = $datos['nombreCargo'];
     $descripcion = $datos['descripcion'];
 
@@ -23,6 +25,7 @@ if ($idGet != "") {
     $action = "Modificar";
 }
 
+// esta variable es solo para cambiar la clase 'active' del sidebar
 $route = 'cargos';
 ?>
 
@@ -46,9 +49,9 @@ $route = 'cargos';
     <script src="https://kit.fontawesome.com/3fb00ab759.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
 
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -71,19 +74,19 @@ $route = 'cargos';
 
             <div class="container bg-secondary mt-4 rounded" style="max-width: 600px;">
                 <h2 class="text-white text-center pt-2">Detalles del Cargo</h2>
-                <form action="../Controllers/cargoController.php" method="post" enctype="multipart/form-data">
+                <form action="../../Controllers/cargoController.php" method="post" enctype="multipart/form-data">
                     <input type="text" name="bandera" value="<?php echo $action == 'Agregar' ? '1' : '2' ?>" hidden>
                     <?php if ($action == 'Modificar') {
-                        echo '<input type="text" name="id" value="' . $idGet . '" hidden>';
+                        echo '<input type="text" name="id" value="' . $id . '" hidden>';
                     } ?>
                     <div class="bg-secondary rounded p-4 pt-1  my-2 mx-3">
                         <div class="form-floating mb-3">
                             <input type="text" name="nombreCargo" class="form-control" id="nombreCargo" value="<?php echo isset($nombre_cargo) ? $nombre_cargo : "" ?>" placeholder="Nombre del Cargo" required>
-                            <label for="nombreCargo">Nombre del Cargo</label>
+                            <label for="nombreCargo">Nombre del Cargo <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="descripcion" class="form-control" id="descripcion" value="<?php echo isset($descripcion) ? $descripcion : "" ?>" placeholder="Descripcion del Cargo" required>
-                            <label for="salario">Descripcion del Cargo</label>
+                            <label for="salario">Descripcion del Cargo <span class="text-danger">*</span></label>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary py-3 w-50  mb-0"><?= $action ?></button>
@@ -107,7 +110,7 @@ $route = 'cargos';
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="../../assets/js/main.js"></script>
+    <script src="../../../assets/js/main.js"></script>
 </body>
 
 </html>

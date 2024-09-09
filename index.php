@@ -1,24 +1,28 @@
-
 <?php
-include_once('./conf/conf.php');
+$error = "";
+
+require_once(__DIR__ . '/admin/Negocio/usuarios.php');
+
+$usuario = new Usuario();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : "";
+
+    $nombreUsuario = isset($_POST['usuario']) ? $_POST['usuario'] : "";
     $password = isset($_POST['password']) ? $_POST['password'] : "";
-    $query = "SELECT * FROM usuario WHERE nombreUsuario='$usuario' && password='" . md5($password) . "'";
-    $error = "";
 
-    $ejecutar = mysqli_query($conn, $query);
+    $datosUsuario = $usuario->get_usuario($nombreUsuario, $password);
 
-    if (mysqli_num_rows($ejecutar) > 0) {
+    if (!empty($datosUsuario)) {
         session_start();
-        $_SESSION['usuario'] = $usuario;
-        mysqli_close($conn);
+        $_SESSION['usuario'] = $datosUsuario['nombreUsuario'];
+        $_SESSION['user_id'] = $datosUsuario['id'];
+        $_SESSION['user_name'] = $datosUsuario['nombre'];
         header("Location: ./admin/index.php");
     } else {
         $error = "Contraseña o usuario incorrectos";
     }
 }
+
 
 ?>
 
@@ -73,12 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </a>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="usuario" class="form-control" id="floatingInput" placeholder="Usuario">
-                            <label for="floatingInput">Usuario</label>
+                            <input type="text" name="usuario" class="form-control" id="floatingInput" placeholder="Usuario" required>
+                            <label for="floatingInput">Usuario  <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña">
-                            <label for="floatingPassword">Contraseña</label>
+                            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña" required>
+                            <label for="floatingPassword">Contraseña  <span class="text-danger">*</span></label>
                         </div>
                         <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
                         <p class="text-center mb-0">Olvidaste tu contraseña? <a href="#">Click aqui</a></p>
