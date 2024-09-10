@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['usuario'] == "") {
+if ($_SESSION['user_name'] == "") {
     header("Location: ../../index.php");
     exit();
 }
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
     
-    $result = $bandera == 1 ? $empleado->add() : $empleado->update($id);
+    $result = $bandera == 1 ? $empleado->agregar() : $empleado->actualizar($id);
 
     if ($result) {
         $message_header = $bandera == 1 ? "Empleado Guardado" : "Empleado Actualizado";
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bandera']) && $_GET['bandera'] == 3) {
     $id = isset($_GET['id']) ? $_GET['id'] : '';
-    if ($empleado->delete($id)) {
+    if ($empleado->eliminar($id)) {
         set_message("Empleado Eliminado", "Empleado eliminado correctamente", "success");
     } else {
         set_message("Error al Eliminar", "No se pudo eliminar el Empleado", "danger");

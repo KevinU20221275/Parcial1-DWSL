@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['usuario'] == "") {
+if ($_SESSION['user_name'] == "") {
     header("Location: ../../../index.php");
     exit();
 }
@@ -21,7 +21,7 @@ if ($id != "") {
 
     $empleado = new Empleado();
     
-    $datos = $empleado->get_empleado($id);
+    $datos = $empleado->obtener_empleado_por_id($id);
 
     $nombre = $datos['nombre'];
     $telefono = $datos['telefono'];

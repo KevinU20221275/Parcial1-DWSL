@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['usuario'] == "") {
+if ($_SESSION['user_name'] == "") {
     header("Location: ../../../index.php");
     exit();
 }
@@ -17,7 +17,7 @@ if ($id != "") {
 
     $cargo = new Cargo();
     
-    $datos = $cargo->get_cargo($id);
+    $datos = $cargo->obtener_cargo_por_id($id);
     $nombre_cargo = $datos['nombreCargo'];
     $descripcion = $datos['descripcion'];
 

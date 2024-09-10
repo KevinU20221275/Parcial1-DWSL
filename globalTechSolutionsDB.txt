@@ -1,6 +1,6 @@
 create DATABASE globalTechSolutionsDB;
 
-create table usuario(
+create table Usuario(
 	id int PRIMARY KEY AUTO_INCREMENT,
     nombre varchar(100),
     nombreUsuario varchar(50) UNIQUE,

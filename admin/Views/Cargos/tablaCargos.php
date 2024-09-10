@@ -3,7 +3,7 @@ include_once('../../Negocio/cargos.php');
 $cargos = new Cargo();
 
 if ($busqueda != NULL) {
-    $result = $cargos->search_cargo($busqueda);
+    $result = $cargos->buscar_cargo($busqueda);
 } else {
     $result = $cargos->listar_cargos();
 }

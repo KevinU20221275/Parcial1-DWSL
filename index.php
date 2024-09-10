@@ -7,16 +7,16 @@ $usuario = new Usuario();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $nombreUsuario = isset($_POST['usuario']) ? $_POST['usuario'] : "";
+    $nombre_usuario = isset($_POST['user_name']) ? $_POST['user_name'] : "";
     $password = isset($_POST['password']) ? $_POST['password'] : "";
 
-    $datosUsuario = $usuario->get_usuario($nombreUsuario, $password);
+    $datosUsuario = $usuario->get_usuario($nombre_usuario, $password);
 
     if (!empty($datosUsuario)) {
         session_start();
-        $_SESSION['usuario'] = $datosUsuario['nombreUsuario'];
+        $_SESSION['user'] = $datosUsuario['nombre'];
         $_SESSION['user_id'] = $datosUsuario['id'];
-        $_SESSION['user_name'] = $datosUsuario['nombre'];
+        $_SESSION['user_name'] = $datosUsuario['nombreUsuario'];
         header("Location: ./admin/index.php");
     } else {
         $error = "Contraseña o usuario incorrectos";
@@ -77,14 +77,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </a>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="usuario" class="form-control" id="floatingInput" placeholder="Usuario" required>
-                            <label for="floatingInput">Usuario  <span class="text-danger">*</span></label>
+                            <input type="text" name="user_name" class="form-control" id="floatingInput" placeholder="Nombre de Usuario" required>
+                            <label for="floatingInput">Nombre de Usuario  <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-4">
                             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña" required>
                             <label for="floatingPassword">Contraseña  <span class="text-danger">*</span></label>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Ingresar</button>
                         <p class="text-center mb-0">Olvidaste tu contraseña? <a href="#">Click aqui</a></p>
                         <p class="text-center text-danger mt-0"><?= $error ?></p>
                     </div>

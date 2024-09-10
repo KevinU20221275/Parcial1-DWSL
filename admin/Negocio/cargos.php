@@ -17,7 +17,7 @@ class Cargo extends Conf {
         }
     }
 
-    public function add(){
+    public function agregar(){
         $query= "INSERT INTO Cargo (
             nombreCargo,
             descripcion
@@ -35,7 +35,7 @@ class Cargo extends Conf {
         return $this->exec_query($query,$params);
     }
 
-    public function update($id){
+    public function actualizar($id){
         $query = "UPDATE Cargo SET
             nombreCargo = :nombre_cargo,
             descripcion = :descripcion
@@ -51,14 +51,14 @@ class Cargo extends Conf {
 
     }
 
-    public function delete($id){
+    public function eliminar($id){
         $query = "DELETE FROM Cargo WHERE id = :id";
         $params = [':id' => $id];
 
         return $this->exec_query($query, $params);
     }
 
-    public function get_cargo($id){
+    public function obtener_cargo_por_id($id){
         $query = "SELECT id, nombreCargo, descripcion FROM Cargo WHERE id = :id";
         $params = [':id' => $id];
 
@@ -71,7 +71,7 @@ class Cargo extends Conf {
         }
     }
 
-    public function search_cargo($busqueda){
+    public function buscar_cargo($busqueda){
         $query = "SELECT * FROM Cargo
         WHERE id LIKE :busqueda OR
         nombreCargo LIKE :busqueda OR 

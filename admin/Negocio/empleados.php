@@ -23,7 +23,7 @@ class Empleado extends Conf {
         }
     }
 
-    public function add(){
+    public function agregar(){
         $query= "INSERT INTO Empleado (
             nombre,
             telefono,
@@ -50,7 +50,7 @@ class Empleado extends Conf {
         return $this->exec_query($query,$params);
     }
 
-    public function update($id){
+    public function actualizar($id){
         $query = "UPDATE Empleado SET
             nombre = :nombre,
             telefono = :telefono,
@@ -72,14 +72,14 @@ class Empleado extends Conf {
 
     }
 
-    public function delete($id){
+    public function eliminar($id){
         $query = "DELETE FROM Empleado WHERE id = :id";
         $params = [':id' => $id];
 
         return $this->exec_query($query, $params);
     }
 
-    public function get_empleado($id){
+    public function obtener_empleado_por_id($id){
         $query = "SELECT id,nombre,telefono,correo,salario,cargoId FROM Empleado WHERE id = :id";
         $params = [':id' => $id];
 
@@ -92,7 +92,7 @@ class Empleado extends Conf {
         }
     }
 
-    public function search_empleado($busqueda){
+    public function buscar_empleado($busqueda){
         $query = "SELECT Empleado.id, nombre, telefono, correo, salario, nombreCargo 
                 FROM Empleado INNER JOIN Cargo
                 ON Empleado.cargoId = Cargo.id

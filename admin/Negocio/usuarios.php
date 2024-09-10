@@ -10,7 +10,7 @@ class Usuario extends Conf {
  
 
     public function get_usuario($usuario, $password){
-        $query = "SELECT id,nombre,nombreUsuario FROM usuario WHERE nombreUsuario=:nombreUsuario && password=:password";
+        $query = "SELECT id,nombre,nombreUsuario FROM Usuario WHERE nombreUsuario=:nombreUsuario && password=:password";
         $params = [':nombreUsuario' => $usuario,
                     ':password' => md5($password)
         ];
@@ -25,7 +25,7 @@ class Usuario extends Conf {
     }
 
     public function update($id){
-        $query = "UPDATE usuario SET
+        $query = "UPDATE Usuario SET
             nombre = :nombre,
             nombreUsuario = :nombreUsuario,
             password = :password

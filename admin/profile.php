@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['usuario'] == "") {
+if ($_SESSION['user_name'] == "") {
     header("Location: ../index.php");
     exit();
 }
@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($usuario->update($id)) {
             set_message("Perfil Actualizado","Se actualizaron tus datos correctamente", "success");
     
-            $_SESSION['user_name'] = $_POST['nombre'];
-            $_SESSION['usuario'] = $_POST['nombreUsuario'];
+            $_SESSION['user'] = $_POST['nombre'];
+            $_SESSION['user_name'] = $_POST['nombreUsuario'];
         } else {
             set_message("Error al Actualizar","No se pudo actualizar tus datos","danger");
         }
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0"><?php echo $_SESSION['usuario'] ?></h6>
+                        <h6 class="mb-0"><?php echo $_SESSION['user_name'] ?></h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -103,10 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="../img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex"><?php echo $_SESSION['usuario'] ?></span>
+                            <span class="d-none d-lg-inline-flex"><?php echo $_SESSION['user_name'] ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="./Views/Admin/profile.php" class="dropdown-item">Mi Perfil</a>
+                            <a href="profile.php" class="dropdown-item">Mi Perfil</a>
                             <a href="logOut.php" class="dropdown-item">Cerrar Sesion</a>
                         </div>
                     </div>
@@ -122,8 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2 class="text-white text-center pt-2">Perfil</h2>
                 <div class='ms-2 rounded mt-2 p-2 bg-secondary mx-3 w-full text-center'>
                     <img class="mb-2" src="../assets/img/user.jpg" alt="" style="width: 50px; border-radius:100% !important;">
-                    <h6 class='fw-normal mb-2'>Nombre: <small class="text-warning"><?= $_SESSION['user_name'] ?></small> </h6>
-                    <h6 class="fw-normal mb-2">Nombre de Usuario: <small class="text-warning"><?= $_SESSION['usuario'] ?> </small></h6>
+                    <h6 class='fw-normal mb-2'>Nombre: <small class="text-warning"><?= $_SESSION['user'] ?></small> </h6>
+                    <h6 class="fw-normal mb-2">Nombre de Usuario: <small class="text-warning"><?= $_SESSION['user_name'] ?> </small></h6>
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -145,11 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input type="text" name="id" value="<?= $_SESSION['user_id'] ?>" hidden>
                                 <div class="bg-secondary rounded p-4 pt-1  my-2 mx-3">
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="nombre" class="form-control" id="nombre" value="<?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : "" ?>" placeholder="Nombre" required>
+                                        <input type="text" name="nombre" class="form-control" id="nombre" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'] : "" ?>" placeholder="Nombre" required>
                                         <label for="nombre">Nuevo Nombre <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" name="nombreUsuario" class="form-control" id="nombreUsuario" value="<?php echo isset($_SESSION['usuario']) ? $_SESSION['usuario'] : "" ?>" placeholder="Telefono" required>
+                                        <input type="text" name="nombreUsuario" class="form-control" id="nombreUsuario" value="<?php echo isset($_SESSION['user_name']) ? $_SESSION['user_name'] : "" ?>" placeholder="Telefono" required>
                                         <label for="nombreUsuario">Nuevo Nombre de Usuario <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="form-floating mb-3">

@@ -3,7 +3,7 @@ include_once('../../Negocio/empleados.php');
 $empleados = new Empleado();
 
 if ($busqueda != NULL) {
-    $result = $empleados->search_empleado($busqueda);
+    $result = $empleados->buscar_empleado($busqueda);
 } else {
     $result = $empleados->listar_empleados();
 }

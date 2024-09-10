@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['usuario'] == "") {
+if ($_SESSION['user_name'] == "") {
     header("Location: ../../index.php");
     exit();
 }
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = isset($_POST['id']) ? $_POST['id'] : '';
     $bandera = isset($_POST['bandera']) ? $_POST['bandera'] : '';
 
-    $result = $bandera == 1 ? $cargo->add() : $cargo->update($id);
+    $result = $bandera == 1 ? $cargo->agregar() : $cargo->actualizar($id);
 
     if ($result) {
         $message_header = $bandera == 1 ? "Cargo Guardado" : "Cargo Actualizado";
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bandera']) && $_GET['bandera'] == 3) {
     $id = isset($_GET['id']) ? $_GET['id'] : '';
-    if ($cargo->delete($id)) {
+    if ($cargo->eliminar($id)) {
         set_message("Cargo Eliminado", "Cargo eliminado correctamente", "success");
     } else {
         set_message("Error al Eliminar", "No se pudo eliminar el Cargo", "danger");
