@@ -16,13 +16,23 @@ if ($id != "") {
     require_once('../../Negocio/cargos.php');
 
     $cargo = new Cargo();
-    
+
     $datos = $cargo->obtener_cargo_por_id($id);
     $nombre_cargo = $datos['nombreCargo'];
     $descripcion = $datos['descripcion'];
 
-    $title = "Modificar Cargo";
-    $action = "Modificar";
+    $action = "Actualizar";
+    $title = "$action Cargo";
+} else if (isset($_SESSION['formData'])) {
+    $id = $_SESSION['formData']['id'];
+    $nombre_cargo = $_SESSION['formData']['nombreCargo'];
+    $descripcion = $_SESSION['formData']['descripcion'];
+    $action = $_SESSION['formData']['action'];
+
+    $title = "$action Cargo";
+
+    $_SESSION['formData'] = null;
+    unset($_SESSION['formData']);
 }
 
 // esta variable es solo para cambiar la clase 'active' del sidebar
@@ -75,13 +85,19 @@ $route = 'cargos';
             <div class="container bg-secondary mt-4 rounded" style="max-width: 600px;">
                 <h2 class="text-white text-center pt-2">Detalles del Cargo</h2>
                 <form action="../../Controllers/cargoController.php" method="post" enctype="multipart/form-data">
-                    <input type="text" name="bandera" value="<?php echo $action == 'Agregar' ? '1' : '2' ?>" hidden>
-                    <?php if ($action == 'Modificar') {
+                    <input type="text" name="action" value="<?php echo $action ?>" hidden>
+                    <?php if ($action == 'Actualizar') {
                         echo '<input type="text" name="id" value="' . $id . '" hidden>';
                     } ?>
                     <div class="bg-secondary rounded p-4 pt-1  my-2 mx-3">
+                        <span class="text-danger text-center">
+                            <?php
+                            echo $_SESSION['empty_field_error'];
+                            unset($_SESSION['empty_field_error']);
+                            ?>
+                        </span>
                         <div class="form-floating mb-3">
-                            <input type="text" name="nombreCargo" class="form-control" id="nombreCargo" value="<?php echo isset($nombre_cargo) ? $nombre_cargo : "" ?>" placeholder="Nombre del Cargo" required>
+                            <input type="text" name="nombreCargo" class="form-control" id="nombreCargo" value="<?php echo isset($nombre_cargo) ? $nombre_cargo : "" ?>" placeholder="Nombre del Cargo" >
                             <label for="nombreCargo">Nombre del Cargo <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
@@ -101,7 +117,7 @@ $route = 'cargos';
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
-    
+
     <!-- Footer Start -->
     <?php include_once('../modules/footer.php') ?>
     <!-- Footer End -->

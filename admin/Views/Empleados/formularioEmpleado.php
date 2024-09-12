@@ -20,7 +20,7 @@ if ($id != "") {
     require_once('../../Negocio/empleados.php');
 
     $empleado = new Empleado();
-    
+
     $datos = $empleado->obtener_empleado_por_id($id);
 
     $nombre = $datos['nombre'];
@@ -29,9 +29,8 @@ if ($id != "") {
     $salario = $datos['salario'];
     $cargoId = $datos['cargoId'];
 
-    $title = "Modificar Empleado";
-    $action = "Modificar";
-    
+    $action = "Actualizar";
+    $title = "$action Empleado";
 } else if (isset($_SESSION['formData'])) {
     $id = $_SESSION['formData']['id'];
     $nombre = $_SESSION['formData']['nombre'];
@@ -41,7 +40,7 @@ if ($id != "") {
     $cargoId = $_SESSION['formData']['cargoId'];
     $action = $_SESSION['formData']['action'];
 
-    $title = $action == "Agregar" ? "Agregar Empleado" : "Modificar Empleado";
+    $title = "$action Empleado";
 
     $_SESSION['formData'] = null;
     unset($_SESSION['formData']);
@@ -96,13 +95,19 @@ $route = 'empleados';
             <div class="container bg-secondary mt-4 rounded" style="max-width: 600px;">
                 <h2 class="text-white text-center pt-2">Datos del Empleado</h2>
                 <form action="../../Controllers/empleadoController.php" method="post" enctype="multipart/form-data">
-                    <input type="text" name="bandera" value="<?php echo $action == 'Agregar' ? '1' : '2' ?>" hidden>
-                    <?php if ($action == 'Modificar') {
+                    <input type="text" name="action" value="<?php echo $action ?>" hidden>
+                    <?php if ($action == 'Actualizar') {
                         echo '<input type="text" name="id" value="' . $id . '" hidden>';
                     } ?>
                     <div class="bg-secondary rounded p-4 pt-1  my-2 mx-3">
+                        <span class="text-danger text-center">
+                            <?php
+                            echo $_SESSION['empty_field_error'];
+                            unset($_SESSION['empty_field_error']);
+                            ?>
+                        </span>
                         <div class="form-floating mb-3">
-                            <input type="text" name="nombre" class="form-control" id="nombre" value="<?php echo isset($nombre) ? $nombre : "" ?>" placeholder="Nombre" required>
+                            <input type="text" name="nombre" class="form-control" id="nombre" value="<?php echo isset($nombre) ? $nombre : "" ?>" placeholder="Nombre">
                             <label for="nombre">Nombre <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
@@ -110,21 +115,21 @@ $route = 'empleados';
                             <label for="telefono">Telefono <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="correo" class="form-control" id="email" value="<?php echo isset($correo) ? $correo : "" ?>" placeholder="Email" required>
+                            <input type="text" name="correo" class="form-control" id="email" value="<?php echo isset($correo) ? $correo : "" ?>" placeholder="Email">
                             <label for="email">Email <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="salario" class="form-control" id="salario" value="<?php echo isset($salario) ? $salario : "" ?>" placeholder="Salario" required>
                             <label for="salario">Salario <span class="text-danger">*</span></label>
                             <span class="text-danger">
-                            <?php
+                                <?php
                                 echo $_SESSION['error_message'];
                                 unset($_SESSION['error_message']);
-                            ?>
+                                ?>
                             </span>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="cargoId" id="cargoId" required>
+                            <select class="form-select" name="cargoId" id="cargoId">
                                 <option value="">Seleccione</option>
                                 <?php foreach ($cargos as $cargo) {
                                     if (isset($cargoId) && $cargo['id'] == $cargoId) {

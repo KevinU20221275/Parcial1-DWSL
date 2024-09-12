@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $id = isset($_POST['id']) ? $_POST['id'] : '';
 
-    $bandera = isset($_POST['bandera']) ? $_POST['bandera'] : "";
-    
-    if (!is_numeric($empleado->salario) || $empleado->salario <= 0) {
-        $_SESSION['error_message'] = "El salario debe ser un número positivo";
+    $action = isset($_POST['action']) ? $_POST['action'] : "";
+
+    if (hasEmptyField([$empleado->nombre,$empleado->telefono, $empleado->correo,$empleado->salario, $empleado->cargo_id])) {
+        $_SESSION['empty_field_error'] = "Debe llenar todos los campos";
         $_SESSION['formData'] = [
-            'action' => $bandera == 1 ? 'Agregar' : 'Modificar',
+            'action' => $action,
             'id' => $id,
             'nombre' => $empleado->nombre,
             'telefono' => $empleado->telefono,
@@ -36,22 +36,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
     
-    $result = $bandera == 1 ? $empleado->agregar() : $empleado->actualizar($id);
+    if (!is_numeric($empleado->salario) || $empleado->salario <= 0) {
+        $_SESSION['error_message'] = "El salario debe ser un número positivo";
+        $_SESSION['formData'] = [
+            'action' => $action,
+            'id' => $id,
+            'nombre' => $empleado->nombre,
+            'telefono' => $empleado->telefono,
+            'correo' => $empleado->correo,
+            'salario' => $empleado->salario,
+            'cargoId' => $empleado->cargo_id,
+        ];
+        header("Location: ../Views/Empleados/formularioEmpleado.php");
+        exit();
+    }
+    
+    $result = $action == "Agregar" ? $empleado->agregar() : $empleado->actualizar($id);
 
     if ($result) {
-        $message_header = $bandera == 1 ? "Empleado Guardado" : "Empleado Actualizado";
-        $message = $bandera == 1 ? "Empleado Agregado correctamente" : "Empleado Actualizado correctamente";
-        set_message($message_header, $message, "success");
+        $action_message = $action == "Agregar" ? "Agregado" : "Actualizado";
+        set_message("Empleado $action_message", "Empleado $action_message correctamente", "success");
     } else {
-        $error_header = $bandera == 1 ? "Error al Guardar" : "Error al Actualizar";
-        $message = $bandera == 1 ? "No se puedo Agregar el Empleado" : "No se puedo Actualizar el Empleado";
-        set_message($error_header, $message, "danger");
+        set_message("Error al $action", "No se pudo $action el Empleado", "danger");
     }
     header("Location: ../Views/Empleados/index.php");
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bandera']) && $_GET['bandera'] == 3) {
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action']) && $_GET['action'] == 'Eliminar') {
     $id = isset($_GET['id']) ? $_GET['id'] : '';
     if ($empleado->eliminar($id)) {
         set_message("Empleado Eliminado", "Empleado eliminado correctamente", "success");

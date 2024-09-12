@@ -52,7 +52,7 @@ if ($busqueda != NULL) {
                             echo "<td>". $row['nombreCargo']. "</td>";
                             echo "<td>
                                         <a href='formularioEmpleado.php?id=" . $row['id'] . "' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
-                                        <a href='../../Controllers/empleadoController.php?id=" . $row['id'] . "&bandera=3' class='btn btn-sm btn-primary'><i class='fa-solid fa-trash'></i></a>
+                                        <a href='../../Controllers/empleadoController.php?id=" . $row['id'] . "&action=Eliminar' class='btn btn-sm btn-primary'><i class='fa-solid fa-trash'></i></a>
                                   </td>";
                             echo "</tr>";
                         }

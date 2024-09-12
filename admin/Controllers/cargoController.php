@@ -15,24 +15,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cargo->descripcion = isset($_POST['descripcion']) ? $_POST['descripcion'] : '';
 
     $id = isset($_POST['id']) ? $_POST['id'] : '';
-    $bandera = isset($_POST['bandera']) ? $_POST['bandera'] : '';
+    $action = isset($_POST['action']) ? $_POST['action'] : '';
 
-    $result = $bandera == 1 ? $cargo->agregar() : $cargo->actualizar($id);
+    if (hasEmptyField([$cargo->nombre_cargo, $cargo->descripcion])){
+        $_SESSION['empty_field_error'] = "Debe llenar todos los campos";
+        $_SESSION['formData'] = [
+            'action' => $action,
+            'id' => $id,
+            'nombreCargo' => $cargo->nombre_cargo,
+            'descripcion' => $cargo->descripcion,
+        ];
+        header("Location: ../Views/Cargos/formularioCargos.php");
+        exit();
+    }
+
+    $result = $action == "Agregar" ? $cargo->agregar() : $cargo->actualizar($id);
 
     if ($result) {
-        $message_header = $bandera == 1 ? "Cargo Guardado" : "Cargo Actualizado";
-        $message = $bandera == 1 ? "Cargo Agregado correctamente" : "Cargo Actualizado correctamente";
-        set_message($message_header, $message, "success");
+        $action_message = $action == "Agregar" ? "Agregado" : "Actualizado";
+        set_message("Cargo $action_message", "Cargo $action_message correctamente", "success");
     } else {
-        $error_header = $bandera == 1 ? "Error al Guardar" : "Error al Actualizar";
-        $message = $bandera == 1 ? "No se puedo Agregar el Cargo" : "No se puedo Actualizar el Cargo";
-        set_message($error_header, $message, "danger");
+        set_message("Error al $action" , "No se pudo $action el Cargo", "danger");
     }
     header("Location: ../Views/Cargos/index.php");
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['bandera']) && $_GET['bandera'] == 3) {
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action']) && $_GET['action'] == 'Eliminar') {
     $id = isset($_GET['id']) ? $_GET['id'] : '';
     if ($cargo->eliminar($id)) {
         set_message("Cargo Eliminado", "Cargo eliminado correctamente", "success");

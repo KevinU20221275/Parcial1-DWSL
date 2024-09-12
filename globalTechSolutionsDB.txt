@@ -29,3 +29,5 @@ INSERT INTO Usuario (nombre, nombreUsuario, password) VALUES ("Kevin Antonio","K
 INSERT INTO Cargo (nombreCargo, descripcion) VALUES ("Gerente de Marketing", "Encargado de manejar el contenido de publicidad de la empresa");
 INSERT INTO Cargo (nombreCargo, descripcion) VALUES ("Contador", "Encargado de llevar la contabilidad de la empresa");
 INSERT INTO Cargo (nombreCargo, descripcion) VALUES ("Programador Frontend", "Encargado de desarrollar la parte visual del software");
+
+
